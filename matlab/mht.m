@@ -10,7 +10,7 @@ classdef mht
         % Z      | Subgroup ID          | int^n      |
         % n_boot | Bootstrap iterations | int        |
         %
-        function [difference_absolute_og_vector, p_values_single, p_value_multi] = calculate(R, Y, D, Z, n_boot)
+        function [difference_absolute_og_vector, p_values_single_og, p_values_multi] = calculate(R, Y, D, Z, n_boot)
             
             % Default bootstrap iterations if none given
             if nargin < 5
@@ -34,21 +34,15 @@ classdef mht
                                     
             [difference_raw_og_vector, difference_absolute_og_vector, difference_studentized_og_vector]...
                 = mht.calculate_difference_statistics(R_indices, mean_og_matrix, var_og_matrix, n_og_vector);
-            
-            
+                        
             % Calculate Bootstrapped Differences, i.e. test statistics
             % NOTE: Original differences are needed for centering
             %--------------------------------------------------------------
             difference_studentized_centered_boot_matrix = zeros(n_comparisons, n_boot);
-                        
-%             mean_boot_tensor = zeros([size(mean_og_matrix), n_boot]);
-%             var_boot_tensor = zeros([size(var_og_matrix), n_boot]);
-            
+                                   
             parfor l = 1 : n_boot
                 Y_boot = cellfun(@(z) z(randi(numel(z), [numel(z), 1])), Y_cell, 'UniformOutput', false); 
                 
-%                 mean_boot_tensor(:,:,l) = cellfun(@mean, Y_boot);
-%                 var_boot_tensor(:,:,l) = cellfun(@var, Y_boot);
                 mean_boot= cellfun(@mean, Y_boot);
                 var_boot = cellfun(@var, Y_boot);
                 
@@ -60,33 +54,13 @@ classdef mht
             %--------------------------------------------------------------
             [ts_distribution_og, ts_distribution_boot] = mht.calculate_test_statistic_distribution(difference_studentized_og_vector, difference_studentized_centered_boot_matrix);
 
-            p_values_single = 1 - ts_distribution_og;
+            p_values_single_og = 1 - ts_distribution_og;
+			p_values_single_boot = 1 - ts_distribution_boot;
             
-            p_value_multi = mht.calculate_multiple_hypothesis_p_value(ts_distribution_og, ts_distribution_boot);
+            p_values_multi = mht.calculate_multiple_hypothesis_p_value(p_values_single_og, p_values_single_boot);
           
         end
-        
-        %------------------------------------------------------------------
-        % Splits outcome data in cell array by treatment and subgroup
-        %------------------------------------------------------------------
-        function [id_group, Y_cell] = split_data(Y, D, Z)            
-            id_group = unique([D,Z],'rows');
-            id_group = [id_group, (1:size(id_group,1))'];
-            n_groups = size(id_group,1);
-            
-            K = size(Y,2);
-            
-            Y_cell = cell(n_groups, K);
-            
-            for l = 1 : n_groups
-                mask = D == id_group(l,1) & Z == id_group(l,2);                
-                                
-                for k = 1 : K
-                    Y_cell{l,k} = Y(mask,k);                    
-                end
-            end            
-        end
-        
+                
         %------------------------------------------------------------------
         % Calculates differences for original data 
         %------------------------------------------------------------------
@@ -157,23 +131,23 @@ classdef mht
         %------------------------------------------------------------------
         % Calculates MHT modified p-value
         %------------------------------------------------------------------
-        function p_values = calculate_multiple_hypothesis_p_value(ts_distribution_og, ts_distribution_boot)
-            p_values = 1 - sum(max(ts_distribution_boot) <= ts_distribution_og,2) / size(ts_distribution_boot,2); 
+        function p_values = calculate_multiple_hypothesis_p_value(p_values_single_og, p_values_single_boot)
+            p_values = sum(max(p_values_single_boot,[],1) <= p_values_single_og,2) / size(p_values_single_boot,2); 
         end
         
         %------------------------------------------------------------------
         % Stepwise Procedure
         %------------------------------------------------------------------
-        function p_values = calculate_stepwise_multiple_hypothesis_p_value(ts_distribution_og, ts_distribution_boot)
-            n_comparisons = size(ts_distribution_og,1);
+        function p_values = calculate_stepwise_multiple_hypothesis_p_value(p_values_single_og, p_values_single_boot)
+            n_comparisons = size(p_values_single_og,1);
             
-            [ts_distribution_og, idx_sort] = sort(ts_distribution_og);
-            ts_distribution_boot = ts_distribution_boot(idx_sort,:);
+            [p_values_single_og, idx_sort] = sort(p_values_single_og);
+            p_values_single_boot = p_values_single_boot(idx_sort,:);
             
             p_values = zeros(n_comparisons,1);
             
             for l = 1 : n_comparisons
-                p_values(l) = 1 - sum(max(ts_distribution_boot(l:end,:),[],1) <= ts_distribution_og(l),2) / size(ts_distribution_boot,2); 
+                p_values(l) = calculate_multiple_hypothesis_p_value(p_values_single_og(l), p_values_single_boot(l:end,:));
             end
             p_values(idx_sort) = p_values;
         end
@@ -196,7 +170,27 @@ classdef mht
                 R_indices(l,2) = idx_2;
             end
         end
-        
+
+        %------------------------------------------------------------------
+        % Splits outcome data in cell array by treatment and subgroup
+        %------------------------------------------------------------------
+        function [id_group, Y_cell] = split_data(Y, D, Z)            
+            id_group = unique([D,Z],'rows');
+            id_group = [id_group, (1:size(id_group,1))'];
+            n_groups = size(id_group,1);
+            
+            K = size(Y,2);
+            
+            Y_cell = cell(n_groups, K);
+            
+            for l = 1 : n_groups
+                mask = D == id_group(l,1) & Z == id_group(l,2);                
+                                
+                for k = 1 : K
+                    Y_cell{l,k} = Y(mask,k);                    
+                end
+            end            
+        end
     end
 end
 

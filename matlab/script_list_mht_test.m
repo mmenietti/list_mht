@@ -8,7 +8,7 @@ n_subgroups = 2;
 n_obs_per_cell = 10^2;
 n_boot = 10^3;
 
-error_mean = 5;
+error_mean = 4;
 
 % Simulate Data
 %--------------------------------------------------------------------------

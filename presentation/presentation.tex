@@ -68,7 +68,7 @@
 		\item Assume $n$ hypotheses are independent.
 		\item A single hypothesis is not rejected by chance with $p_i = 1-\alpha$.
 		\item All $n$ hypotheses are not rejected by chance with $p = (1-\alpha)^n$.
-		\item The chance at least 1 type I error occurs is $p = (1-\alpha)^n$
+		\item The chance at least 1 type I error occurs is $p = 1 - (1-\alpha)^n$
 		\item For $\alpha=0.05, n=5$ the chance of a type I error is $\approx 0.23$
 	\end{itemize}
 
@@ -113,12 +113,13 @@
 		\item $Y_i\in \reals^K$ outcomes for the $i$\textsuperscript{th} observation
 		\item $D_i\in J_T$ treatment index for the $i$\textsuperscript{th} observation
 		\item $Z_i\in J_G$ subgroup index for the $i$\textsuperscript{th} observation
+		\item Note: Only discrete covariates
 	\end{itemize}
 
 	\subsection{Hypothesis Tests}
 
 	\begin{align*}
-		\hypTest{d,d^\prime,k,z} &= \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y_{i,k} - \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{B}} Y_{i,k} = 0 \\
+		\hypTest{d,d^\prime,k,z} &= \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y_{i,k} - \frac{1}{\wrapAbs{\mathcal{B}}}\sum_{i\in\mathcal{B}} Y_{i,k} = 0 \\
 		\mathcal{A} &= \set{i\in J_N}{D_i=d, Z_i=z} \\
 		\mathcal{B} &= \set{i\in J_N}{D_i=d^\prime, Z_i=z}
 	\end{align*}
@@ -130,7 +131,7 @@
 		\item Bootstrap the data, generating $T^b_h(T^0_h,Y,D,Z)$.
 		\item Calculate the empirical distribution values for all test statistics.
 			\begin{align*}
-				P^0_h &= \myPr{T^b_h \leq T^0_h} \in [0,1]^S \\
+				P^0_h &= \myPr{T^b_h \leq T^0_h}  \\
 				P^b_h &= \myPr{T^{b^\prime}_h \leq T^b_h} 
 			\end{align*}
 		\item The modified p-values are calculated against the distribution of the maximum over the single hypothesis distributions.
@@ -142,17 +143,14 @@
 
 	\subsection[Calculating the modified p-values]{Calculating the modified $p$-values}
 
-	\begin{enumerate}
-		\item Order hypotheses by the single hypothesis distributions.
+	\begin{enumerate}[nosep]
+		\item Order hypotheses by the single hypothesis distributions,
+	\begin{equation*} h_1 < h_2 \iff P^0_{1} \leq P^0_{2} \end{equation*}
+		\item The modified p-values are
 			\begin{align*}
-				h_1 < h_2 \iff P^0_{1} \leq P^0_{2}
-			\end{align*}
-		\item The modified p-values are calculated against the distribution of the maximum over the single hypothesis distributions.
-			\begin{align*}
-				\tilde{P}^0_1 &= \tilde{P}^0_1(\set{1,\ldots, S}) \\
-				\tilde{P}^0_2 &= \tilde{P}^0_1(\set{2,\ldots, S}) \\
-				\tilde{P}^0_i &= \tilde{P}^0_1(\set{i,\ldots, S}) \\
-				\tilde{P}^0_S &= P^0_S
+				\tilde{P}^0_1 &= \myPr{\max_{h\mathcal{A}} P^b_h < P^0_1 },\quad \mathcal{A} = \set{1,\ldots, S} \\
+				\tilde{P}^0_2 &= \myPr{\max_{h\mathcal{A}} P^b_h < P^0_2 },\quad \mathcal{A} = \set{2,\ldots, S} \\
+				\tilde{P}^0_i &= \myPr{\max_{h\mathcal{A}} P^b_h < P^0_i },\quad \mathcal{A} = \set{i,\ldots, S}
 			\end{align*}			
 	\end{enumerate}
 	
@@ -163,5 +161,9 @@
 		\item The procedure is not clear
 		\item Based on the code, it involves enumerating all subsets of hypotheses
 	\end{enumerate}
+
+	\subsection{Bibliography}
+
+	\printbibliography
 
 \end{document}
