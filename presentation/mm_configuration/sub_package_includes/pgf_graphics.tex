@@ -1,0 +1,41 @@
+\usepackage{xcolor}
+
+% Support for nice graphics
+\usepackage{tikz}
+	\usepgflibrary{decorations.pathreplacing}
+	\usetikzlibrary{backgrounds}
+
+%
+% Support for nice plots with nice graphics
+%
+\usepackage{pgfplots} 
+	\pgfplotsset{compat=newest}
+	%
+	% Support for typesetting a group of plots together
+	%
+	\usepgfplotslibrary{groupplots}
+
+	%
+	% Support for placing graphics to separate pdfs
+	%
+	\usepgfplotslibrary{external}
+
+	%
+	% Sets the command used to externalize graphics. 
+	% Here we set to xelatex
+	%
+	\ifXeTeX 
+		\tikzexternalize\tikzset{external/system call={xelatex --shell-escape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
+	\else
+		\tikzexternalize \tikzset{external/system call={pdflatex --shell-escape  -halt-on-error-interaction=batchmode -jobname "\image" "\texsource"}}
+	\fi
+	
+
+	%
+	% Sets the path to where graphics are written to by the 'externalize' option
+	%
+	\tikzsetexternalprefix{external_figures/}
+
+	% Defines a fake, do nothing version of the filename command used for externalizing graphics. 
+	% Useful for switching back and forth between externalizing and not, with the same code.
+	\@ifundefined{tiksnextfilename}{ \newcommand{\tiksnextfilename}[1]{} }{}

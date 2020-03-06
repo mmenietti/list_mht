@@ -1,0 +1,132 @@
+%----------------------------------------------------
+% Package Header
+%----------------------------------------------------
+% Needed for a latex package
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{./mm_configuration/my_styles}
+
+
+% Variables to condition code based on package options
+\newif\ifmmPresentation      \mmPresentationfalse  
+\newif\ifmmPresentationPlain \mmPresentationPlainfalse
+\newif\ifmmPresentationLish  \mmPresentationLishfalse
+\newif\ifmmMathScratch       \mmMathScratchfalse
+
+
+% These declare the options and run code conditional on including the option.
+% If an option is included the corresponding boolean is set to true.
+\DeclareOption{mmPresentationLish}{\mmPresentationtrue\mmPresentationLishtrue}
+\DeclareOption{mmPresentationPlain}{\mmPresentationtrue\mmPresentationPlaintrue}
+\DeclareOption{mmMathScratch}{\mmMathScratchtrue\mmMathScratchtrue}
+
+% Needed by latex packages.
+% Ends the options processing section of the package
+% and executes the code therein.
+\ProcessOptions\relax
+
+%------------------------------------------
+%------------------------------------------
+% Settings dependent on my selected format: 
+%   presentation or not a presentation
+%------------------------------------------
+%------------------------------------------
+\ifmmPresentation
+  % Set the fonts if using XeLatex
+  \ifxetex 
+    % Avoid ligatures if possible.
+    % They look odd if character spacing is increased
+    \setmainfont{Cambria}
+    \setsansfont{Montserrat}
+    \setmonofont{Consolas}
+  \else\fi
+
+  \ifmmPresentationLish
+    \include{mm_configuration/sub_package_includes/style_presentation_lish}
+  \else\fi
+
+  \ifmmPresentationPlain
+    \include{mm_configuration/sub_package_includes/style_presentation_plain}
+  \else\fi
+
+\else
+  % Set the fonts if using XeLatex
+  \ifxetex 
+    % Avoid ligatures if possible.
+    % They look odd if character spacing is increased
+    \setmainfont{Cambria}
+    \setsansfont{Calibri}
+    \setmonofont{Consolas}
+  \else\fi
+
+  \ifmmMathScratch
+    \include{mm_configuration/sub_package_includes/style_math_scratch}
+  \else\fi
+\fi
+
+%------------------------------------------
+%------------------------------------------
+% Settings agnostic to my formats.
+% Currently presentation plain, presentation LISH, and article.
+%------------------------------------------
+%------------------------------------------
+
+%------------------------------------------
+% Basic package settings
+%------------------------------------------
+
+% Set the math font if using Xelatex and the unicode math package
+\ifmmMath
+  \ifxetex
+    \setmathfont{Cambria Math}
+  \else\fi
+\else\fi
+
+% Allows math enviroments to break across pages
+% is defined in the AMS math packages
+\ifmmMath
+  \allowdisplaybreaks
+\fi
+
+
+% Footnote without a footnote mark -- Used for thanks on the titlepage
+\def\blfootnote{\xdef\@thefnmark{}\@footnotetext}
+
+
+%------------------------------------------
+% Cross-reference Settings
+%------------------------------------------
+\ifmmCrossRef
+  % Hyperlink styling
+  \hypersetup{colorlinks, urlcolor=black, linkcolor=black, citecolor=black, pdfpagemode=UseNone}
+
+  % Defines the label for references to appendices
+  \crefname{appendix}{appendix}{appendices}
+\fi
+
+%------------------------------------------
+% PGF Plots/Tikz Settings
+%------------------------------------------
+\ifmmPGF
+  % Plot axis with:
+  % - legend horizontal and below plot
+  % - Horizontal grid lines
+  \pgfplotsset{myAxis/.style ={ymajorgrids=true}, legend style={at={(0.5,-0.3)}, anchor=north, draw=none, legend columns=-1}}
+  
+  % Plot sizing options
+  \pgfplotsset{myOneColumn/.style ={height=0.33\textheight, width=0.48\textwidth}}
+  \pgfplotsset{myTwoColumn/.style ={height=0.33\textheight, width=0.98\textwidth}}
+  \pgfplotsset{myFullPage/.style ={height=0.9\paperheight, width=0.9\paperwidth}}
+
+  % Styles for differentiating plots on the same axes
+  \pgfplotsset{myFuncA/.style ={no marks, solid, thick, color=red}}
+  \pgfplotsset{myFuncB/.style={no marks, dotted, thick, color=blue}}
+  \pgfplotsset{myFuncC/.style={no marks, dashed, thick, color=green}}
+  \pgfplotsset{myFuncD/.style={no marks, dashdotted, thick, color=black}}
+
+  % Styles for confidence interval lines matching the above function styles
+  % The CI lines match the function lines but are blended 50% with white to fade them
+  \pgfplotsset{myCiA/.style ={no marks, solid, thick, color=red!50!white}}
+  \pgfplotsset{myCiB/.style={no marks, dotted, thick, color=blue!50!white}}
+  \pgfplotsset{myCiC/.style={no marks, dashed, thick, color=green!50!white}}
+  \pgfplotsset{myCiD/.style={no marks, dashdotted, thick, color=black!50!white}}
+\fi

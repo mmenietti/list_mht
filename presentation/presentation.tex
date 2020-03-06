@@ -1,0 +1,167 @@
+\documentclass[10pt]{article}
+
+\usepackage[mmMath, mmBiblio]{./mm_configuration/package_includes}
+% Available Options
+%  mmMath      : amsmath, amsthm, amsfonts, amssymb, mathtools, xfrac, unicode-math, and math_commands.tex
+%  mmBiblio    : babel, csquotes, and biblatex
+%  mmCrossRef  : hyperref and cleveref
+%  mmDocStyle  : fancyhdr, titlesec, caption, appendix, and setspace
+%  mmPGF       : pgf and tikz packages
+%  mmFloat     : subfig and placins
+%  mmEndFloats : Set to use the endfloats package and place floats at the end of the document
+
+\usepackage[mmPresentationPlain]{./mm_configuration/my_styles}
+% Available Options
+%  mmPresentationPlain : Simple black and white presentation slides.
+%  mmPresentationLish  : Includes the LISH logo and collaborators logos on title page. Headings are LISH red. 
+
+\NewDocumentCommand\hypTest{g}{H\IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\testStat{g}{T^0\IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\bootTestStat{g}{T^b\IfValueT{#1}{\del{#1}}}
+
+\DeclareMathOperator{\hypSet}{\mathcal{S}}
+
+% Bibliography setup
+%-------------------
+\addbibresource{./bibliography/bibliography.bib}
+
+\title{Discussion: Multiple hypothesis testing (MHT) in experimental economics}
+\author{Michael Menietti}
+\date{2020/03/06}
+
+\begin{document}
+
+	\maketitle
+
+	\section{Overview}
+
+	\subsection{Terminology}
+	
+	\begin{itemize}
+		\item Note, herein a hypothesis is a \emph{null} hypothesis.
+			\begin{align*}
+				\beta_1 &= \beta_2
+			\end{align*}
+		\item Typically the ``goal'' is to \emph{reject} the hypothesis.
+			\begin{align*}
+				\beta_1 &\not= \beta_2
+			\end{align*}
+		\item The chance of rejecting, if the hypothesis is true, is $\alpha$.
+		\item $\alpha$ is type I error.
+	\end{itemize}
+
+	\subsection{The Problem with MHT I}
+
+	\begin{itemize}
+		\item An experiment can generate several hypotheses
+			\begin{itemize}
+				\item Multiple outcomes
+				\item Heterogeneous treatment effects
+			\end{itemize}
+		\item Incorrectly rejecting a single hypothesis is controlled
+		\item Incorrectly rejecting one of multiple tests is \emph{not}
+	\end{itemize}
+
+	\subsection{The Problem with MHT II}
+
+	\begin{itemize}
+		\item Assume $n$ hypotheses are independent.
+		\item A single hypothesis is not rejected by chance with $p_i = 1-\alpha$.
+		\item All $n$ hypotheses are not rejected by chance with $p = (1-\alpha)^n$.
+		\item The chance at least 1 type I error occurs is $p = (1-\alpha)^n$
+		\item For $\alpha=0.05, n=5$ the chance of a type I error is $\approx 0.23$
+	\end{itemize}
+
+	\subsection[Classic Correction Approaches]{Classic Correction Approaches}
+
+	\begin{itemize}
+		\item Bonferroni correction, $\tilde{\alpha} = \frac{\alpha}{n}$
+		\item Holm correction, stepwise algorithm, more powerful
+		\item Valid for all error distributions
+		\item Assume worst-case, independent distributions
+		\item Low-power, high chance of type II error
+	\end{itemize}
+
+	\subsection[Nonparametric Approaches]{Nonparametric Approaches}
+
+	\begin{itemize}
+		\item Estimate the distribution of the test statistics
+			\begin{itemize}
+				\item Usually bootstrapping, nonparametric method 
+			\end{itemize}
+		\item Apply a stepwise procedure 
+		\item \textcite{list_2019,white_2000,romano_2005}
+	\end{itemize}
+
+	\subsection[MHT Error Types]{MHT Error Types}
+
+	\begin{itemize}
+		\item Multiple ways to measure MHT errors.
+		\item Non-exhaustively:
+		\begin{description}
+			\item[Familywise] at least 1 type I error
+			\item[m-familywise] $m$ or more type I errors
+			\item[False discovery rate] expected proportion of type I errors
+		\end{description}
+	\end{itemize}
+
+	\section{List (2019) Method}
+
+	\subsection{Data}
+
+	\begin{itemize}
+		\item $Y_i\in \reals^K$ outcomes for the $i$\textsuperscript{th} observation
+		\item $D_i\in J_T$ treatment index for the $i$\textsuperscript{th} observation
+		\item $Z_i\in J_G$ subgroup index for the $i$\textsuperscript{th} observation
+	\end{itemize}
+
+	\subsection{Hypothesis Tests}
+
+	\begin{align*}
+		\hypTest{d,d^\prime,k,z} &= \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y_{i,k} - \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{B}} Y_{i,k} = 0 \\
+		\mathcal{A} &= \set{i\in J_N}{D_i=d, Z_i=z} \\
+		\mathcal{B} &= \set{i\in J_N}{D_i=d^\prime, Z_i=z}
+	\end{align*}
+
+	\subsection{Algorithm 3.1}
+
+	\begin{enumerate}
+		\item Calculate test statistics for original data $T^0_h(Y,D,Z)$.
+		\item Bootstrap the data, generating $T^b_h(T^0_h,Y,D,Z)$.
+		\item Calculate the empirical distribution values for all test statistics.
+			\begin{align*}
+				P^0_h &= \myPr{T^b_h \leq T^0_h} \in [0,1]^S \\
+				P^b_h &= \myPr{T^{b^\prime}_h \leq T^b_h} 
+			\end{align*}
+		\item The modified p-values are calculated against the distribution of the maximum over the single hypothesis distributions.
+			\begin{align*}
+				\tilde{P}^b_{\mathcal{A}} &= \max_{h\in\mathcal{A}} P^b_h, \qquad \mathcal{A} \subset \hypSet \\
+				\tilde{P}^0_h &= \myPr{ \tilde{P}^b_{\mathcal{A}} \leq P^0_h }
+			\end{align*}			
+	\end{enumerate}
+
+	\subsection[Calculating the modified p-values]{Calculating the modified $p$-values}
+
+	\begin{enumerate}
+		\item Order hypotheses by the single hypothesis distributions.
+			\begin{align*}
+				h_1 < h_2 \iff P^0_{1} \leq P^0_{2}
+			\end{align*}
+		\item The modified p-values are calculated against the distribution of the maximum over the single hypothesis distributions.
+			\begin{align*}
+				\tilde{P}^0_1 &= \tilde{P}^0_1(\set{1,\ldots, S}) \\
+				\tilde{P}^0_2 &= \tilde{P}^0_1(\set{2,\ldots, S}) \\
+				\tilde{P}^0_i &= \tilde{P}^0_1(\set{i,\ldots, S}) \\
+				\tilde{P}^0_S &= P^0_S
+			\end{align*}			
+	\end{enumerate}
+	
+	\subsection{Remark 3.7}
+
+	\begin{enumerate}
+		\item There is a more complex procedure (exploiting transitivity)
+		\item The procedure is not clear
+		\item Based on the code, it involves enumerating all subsets of hypotheses
+	\end{enumerate}
+
+\end{document}

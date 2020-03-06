@@ -1,0 +1,20 @@
+%----------------------------------------------------------------------------------
+% Mathematics
+%----------------------------------------------------------------------------------
+
+% Basically standard AMS packages
+\usepackage{amsmath, amsthm, amsfonts, amssymb}
+
+\usepackage{commath}
+
+% Used for allowing \left, \right to cross lines
+\usepackage{mathtools}
+
+% Used for slanted fractions in text
+\usepackage{xfrac}
+
+% Support for setting the math font to modern fonts with Xelatex.
+\ifXeTeX \usepackage[warnings-off={mathtools-colon,mathtools-overbracket, }]{unicode-math} \else \fi
+
+% Personal package with a number of math commands
+\input{./mm_configuration/math_commands.tex}

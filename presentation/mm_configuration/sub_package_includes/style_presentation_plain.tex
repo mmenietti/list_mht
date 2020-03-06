@@ -1,0 +1,145 @@
+%------------------------------------------
+%------------------------------------------
+% Presentation Settings
+%------------------------------------------
+%------------------------------------------
+% The titlesec formats use '#' in their arguments.
+% This is not allowed within a package, at least easily.
+% Putting the configuration is a .tex file and including it seems to work.
+%------------------------------------------
+
+%------------------------------------------
+% Packages needed for presentations settings
+%------------------------------------------
+% Support for header customization
+\usepackage{geometry}
+
+% Support for header customization
+\usepackage{fancyhdr}
+
+% Customize title and sections headers
+\usepackage[explicit]{titlesec}
+
+% Fiddly length adjustments
+\setlength{\headheight}{18pt}
+\setlength{\headsep}{1ex}
+\setlength{\footskip}{3.7pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0cm}
+
+\setlength{\abovedisplayskip}{-1ex}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt} 
+
+% Layout a 16:9 page sized for 11pt fonts to be "presentation size", so small pages.
+\ifxetex 
+    \geometry{driver=xetex, paperwidth=80ex, paperheight=45ex, top=7ex, bottom=0ex, left=2ex, right= 1ex, marginparsep=0pt, marginparwidth=0pt}    
+\else
+    \geometry{paperwidth=80ex, paperheight=45ex, top=7ex, bottom=0ex, left=2ex, right= 1ex, marginparsep=0pt, marginparwidth=0pt}
+\fi
+
+% Clear page headers and footers. 
+% Add a rule below header.
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust section styles to work as slide titles
+\newcommand{\sectionbreak}{\clearpage}
+
+% \ifxetex 
+%     \titleformat{\section}[hang]{\Large\sffamily}{}{0em}{\vfill\thispagestyle{empty}\centering{\huge\sffamily{\addfontfeature{LetterSpace=5.0} #1}}}[\vfill]
+%     \titleformat{\subsection}[hang]{\Large\sffamily}{}{0em}{\clearpage\lhead{\Large\sffamily{\addfontfeature{LetterSpace=10.0} #1}}}%[hafter-codei]
+%     \titleformat{\subsubsection}[hang]{\Large\sffamily}{}{0em}{\rhead{\large\sffamily{\addfontfeature{LetterSpace=15.0} #1}}}%[hafter-codei]
+% \else
+%     \titleformat{\section}[hang]{\Large\sffamily}{}{0em}{\vfill\thispagestyle{empty}\centering{\huge\sffamily #1}}[\vfill]
+%     \titleformat{\subsection}[hang]{\Large\sffamily}{}{0em}{\clearpage\lhead{\Large\sffamily #1}}%[hafter-codei]
+%     \titleformat{\subsubsection}[hang]{\Large\sffamily}{}{0em}{\rhead{\large\sffamily #1}}%[hafter-codei]
+% \fi
+
+\ifxetex 
+    \newcommand{\mmSectionFormat}[1]{
+        \vfill
+        \thispagestyle{empty}
+        \centering{
+            \huge\sffamily
+            \addfontfeature{LetterSpace=5.0} #1
+        }
+    }
+    \newcommand{\mmSubSectionFormat}[1]{
+        \clearpage
+        \lhead{
+            \Large\sffamily
+            \addfontfeature{LetterSpace=10.0} #1
+        }
+    }
+    \newcommand{\mmSubSubSectionFormat}[1]{
+        \rhead{
+            \large\sffamily
+            \addfontfeature{LetterSpace=15.0} #1
+        }
+    }    
+\else
+    \newcommand{\mmSectionFormat}[1]{
+        \vfill
+        \thispagestyle{empty}
+        \centering{ \huge\sffamily #1 }
+    }
+    \newcommand{\mmSubSectionFormat}[1]{
+        \clearpage
+        \lhead{ \Large\sffamily #1 }
+    }
+    \newcommand{\mmSubSubSectionFormat}[1]{
+        \rhead{ \large\sffamily #1 }
+    }    
+\fi
+
+\titleformat{\section}      [hang]{} {}{0em}{\mmSectionFormat{#1}}      [\vfill]
+\titleformat{\subsection}   [hang]{}{}{0em}{\mmSubSectionFormat{#1}}    %[hafter-codei]
+\titleformat{\subsubsection}[hang]{}{}{0em}{\mmSubSubSectionFormat{#1}} %[hafter-codei]
+
+\titlespacing{\section}{0pt}{0em}{-4ex}
+\titlespacing{\subsection}{0em}{0em}{-2ex}
+\titlespacing{\subsubsection}{0em}{0em}{0em}
+
+% Turn off text justification as it isn't appropriate for a presentation
+\raggedright
+
+% Customize the title page
+\usepackage{titling}
+
+\newenvironment{nscenter}
+ {\parskip=0pt\par\nopagebreak\centering}
+ {\par\noindent\ignorespacesafterend}
+ 
+\setlength{\droptitle}{-13.75ex}
+
+\pretitle{\thispagestyle{fancy}\renewcommand{\footrulewidth}{0.4pt}
+    \vfill
+    \Large\sffamily
+    \begin{nscenter}
+}
+\posttitle{\end{nscenter}}
+
+\preauthor{\par
+    \sffamily\setlength{\tabcolsep}{2pt}
+    \begin{nscenter}
+        \begin{tabular}{rl}
+}
+\postauthor{
+        \end{tabular}
+    \end{nscenter}
+    \setlength{\tabcolsep}{6pt}		
+}
+
+\predate{
+    \sffamily
+    \begin{nscenter}
+}
+\postdate{
+    \end{nscenter}
+    \vfill
+}

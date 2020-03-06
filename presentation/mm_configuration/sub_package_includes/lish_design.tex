@@ -1,0 +1,64 @@
+
+\definecolor{lishRed}{rgb}{0.6588, 0.1098, 0.1882}
+\colorlet{lishGray}{gray!80}
+
+\newcommand{\lishRedBox}[1]{
+	\draw[lishRed, line width=#1, rounded corners] 
+	(2,1.5)--(2,0.20)
+	--(0,0.20)--(0,4.7)
+	--(4.6,4.7)--(4.6,3.3);
+}
+
+% Approximately 5in x 2in
+\newcommand{\lishLogoLarge}{        
+	\begin{tikzpicture}        
+		\lishRedBox{6}
+		\node[anchor=south west] at (0.85, 1.7) {\fontsize{48}{48}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+		\node[anchor=south west] at (2.2, 0.6) {\fontsize{24}{24}\fontspec{Roboto Medium}\textcolor{lishGray}{Laboratory for Innovation}};
+		\node[anchor=south west] at (2.2, -0.1) {\fontsize{24}{24}\fontspec{Roboto Medium}\textcolor{lishGray}{Science at Harvard}};
+	\end{tikzpicture}
+}
+
+% Approximately 2in x 1in
+\newcommand{\lishLogoMedium}{
+	\begin{tikzpicture}[scale=0.5]
+		\lishRedBox{3}
+		\node[anchor=south west] at (0.7, 1.7) {\fontsize{24}{24}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+		\node[anchor=south west] at (2.2, 0.6) {\fontsize{12}{12}\fontspec{Roboto Medium}\textcolor{lishGray}{Laboratory for Innovation}};
+		\node[anchor=south west] at (2.2, -0.1) {\fontsize{12}{12}\fontspec{Roboto Medium}\textcolor{lishGray}{Science at Harvard}};
+	\end{tikzpicture}
+}
+
+% Approximately 1 in x 1/2 in
+\newcommand{\lishLogoSmall}{
+	\begin{tikzpicture}[scale=0.25]
+		\lishRedBox{1.5}
+		\node[anchor=south west] at (0.45, 1.5) {\fontsize{12}{12}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+		\node[anchor=south west] at (1.9, 0.4) {\fontsize{6}{6}\fontspec{Roboto Medium}\textcolor{lishGray}{Laboratory for Innovation}};
+		\node[anchor=south west] at (1.9, -0.3) {\fontsize{6}{6}\fontspec{Roboto Medium}\textcolor{lishGray}{Science at Harvard}};
+	\end{tikzpicture}
+}
+
+% Approximately 5in x 2in
+\newcommand{\lishLogoNoTextLarge}{        
+	\begin{tikzpicture}        
+		\lishRedBox{6}
+		\node[anchor=south west] at (0.85, 1.7) {\fontsize{48}{48}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+	\end{tikzpicture}
+}
+
+% Approximately 2in x 1in
+\newcommand{\lishLogoNoTextMedium}{
+	\begin{tikzpicture}[scale=0.5]
+		\lishRedBox{3}
+		\node[anchor=south west] at (0.7, 1.7) {\fontsize{24}{24}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+	\end{tikzpicture}
+}
+
+% Approximately 1 in x 1/2 in
+\newcommand{\lishLogoNoTextSmall}{
+	\begin{tikzpicture}[scale=0.25]
+		\lishRedBox{1.5}
+		\node[anchor=south west] at (0.45, 1.5) {\fontsize{12}{12}\fontspec{Roboto Medium}\addfontfeature{LetterSpace=5.0}\textcolor{lishGray}{LISH}};
+	\end{tikzpicture}
+}

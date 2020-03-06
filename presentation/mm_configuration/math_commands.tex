@@ -1,0 +1,159 @@
+%----------------------------------------------------
+% Required Packages
+%----------------------------------------------------
+% Basically standard AMS packages
+\usepackage{amsmath, amsthm, amsfonts, amssymb}
+
+% Better, more flexible command definitions
+\usepackage{xparse}
+
+% Math constructs defined
+\usepackage{commath}
+
+% Set the math font if using XeLatex
+\ifxetex 
+    \setmathfont{Cambria Math}
+\else\fi
+
+%----------------------------------------------------
+%----------------------------------------------------
+% Command Definitions
+%----------------------------------------------------
+%----------------------------------------------------
+
+%
+% Convenience command to outline a drawing canvas.
+% Not actually math, but not enough non-math commands to justify a separate package
+%
+\newcommand{\drawframe}[2]{\put(0,0){\line(1,0){#1}}\put(0,#2){\line(1,0){#1}}\put(0,0){\line(0,1){#2}}\put(#1,0){\line(0,1){#2}}}
+
+%
+% Convenience commands for wrapping arguments in properly sized delimiters
+%
+\newcommand{\wrap}[1]{\left( #1 \right)}
+\newcommand{\wrapP}[1]{\left( #1 \right)}
+\newcommand{\wrapB}[1]{\left[ #1 \right]}
+\newcommand{\wrapBr}[1]{\left\{ #1 \right\}}
+\newcommand{\wrapAbs}[1]{\left| #1 \right|}
+\newcommand{\wfrac}[2]{\wrap{\frac{#1}{#2}}}
+\newcommand{\ldel}[1]{\left( #1 \right.}
+\newcommand{\rdel}[1]{\left. #1 \right)}
+
+%
+% Short-cut commands for math fonts
+%
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+
+%
+% Simple math symbols
+%
+\DeclareMathOperator{\imp}{\Rightarrow}
+\DeclareMathOperator{\contra}{\rightarrow\leftarrow}
+\DeclareMathOperator{\myEquiv}{\Leftrightarrow}
+
+\DeclareMathOperator{\reals}{\mathbb{R}}
+\DeclareMathOperator{\nat}{\mathbb{N}}
+\DeclareMathOperator{\ints}{\mathbb{Z}}
+
+\DeclareMathOperator{\J}{\mathbf{J}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+
+\DeclareMathOperator{\Let}{\text{Let }}
+\DeclareMathOperator{\Define}{\text{Define }}
+\DeclareMathOperator{\Then}{\text{Then }}
+\DeclareMathOperator{\Suppose}{\text{Suppose }}
+
+\DeclareMathOperator{\vleq}{\rotatebox{90}{\geq}}
+\DeclareMathOperator{\vgeq}{\rotatebox{270}{\leq}}
+\DeclareMathOperator{\vless}{\raisebox{2ex}{\rotatebox{-90}{<}}}
+\DeclareMathOperator{\vgreater}{\raisebox{2ex}{\rotatebox{-90}{>}}}
+
+%
+% Functions with mandatory arguments, technically parentheses
+%
+\newcommand{\erf}[1]{\text{erf}\wrap{#1}}
+\newcommand{\erfc}[1]{\text{erfc}\wrap{#1}}
+\newcommand{\erfcx}[1]{\text{erfcx}\wrap{#1}}
+
+%
+% Functions/Operations with optional parentheses
+%
+\NewDocumentCommand\cov   {g}{\text{cov} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\var   {g}{\text{var} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\rank  {g}{\text{rank} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\pow   {g}{\mathcal{P} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\median{g}{\text{median} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\mean  {g}{\text{mean} \IfValueT{#1}{\del{#1}}}
+\NewDocumentCommand\diag  {g}{\text{diag} \IfValueT{#1}{\del{#1}}}
+
+%
+% Operations with an optional conditional structure
+%
+\NewDocumentCommand\E    {gg}{\text{E}\IfValueT{#1}{\IfValueTF{#2}{\left\( \left. #1 \right| #2 \right\)}{\del{#1}}}}
+\NewDocumentCommand\myPr {gg}{\text{Pr}\IfValueT{#1}{\IfValueTF{#2}{\left\( \left. #1 \right| #2 \right\)}{\del{#1}}}}
+
+\RenewDocumentCommand\set  {mg}{\IfValueTF{#2}{\left\{ \left. #1 \right| #2 \right\}}{\cbr{#1}}} % Prefer my set command to 'commath' version
+
+
+%
+% Mathematical Structures
+%
+\newcommand{\ubar}[1]{\underline{#1}}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+\newcommand{\myLim}[2]{\lim_{#1 \rightarrow #2}}
+\newcommand{\myMin}[1]{\genfrac{}{}{0pt}{2}{\text{min}}{#1}}
+\newcommand{\myMax}[1]{\genfrac{}{}{0pt}{2}{\text{max}}{#1}}
+\newcommand{\myArgMin}[1]{\genfrac{}{}{0pt}{2}{\text{argmin}}{#1}}
+\newcommand{\myArgMax}[1]{\genfrac{}{}{0pt}{2}{\text{argmax}}{#1}}
+
+\newcommand{\convergeP}{\stackrel{p}{\rightarrow}}
+\newcommand{\limP}{\stackrel{p}{\rightarrow}}
+
+\newcommand{\binomBr}[2]{\wrapBr{\genfrac{}{}{0pt}{2}{#1}{#2}}}
+\newcommand{\funcDef}[3]{#1:#2\rightarrow #3}
+\newcommand{\interior}[1]{\genfrac{}{}{0pt}{2}{\circ}{#1}}
+
+\newcommand{\diff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\Diff}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+\newcommand{\secDiff}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\secDiffM}[3]{\frac{\partial^2 #1}{\partial #3 \partial #2}}
+\newcommand{\kDiff}[3]{\frac{\partial^{#3} #1}{\partial #2^{#3}}}
+
+\NewDocumentCommand\evalBar {mgg}{\left. #1 \right|\IfValueT{#2}{_{#2}}\IfValueT{#3}{^{#3}}}
+
+%
+% Theorem-like environments
+%
+\@ifundefined{definition} {\newtheorem {definition} {Definition}  \newtheorem*{definition*} {Definition}  \def\definitionautorefname  {Definition}} {}
+\@ifundefined{hypothesis} {\newtheorem {hypothesis} {Hypothesis}  \newtheorem*{hypothesis*} {Hypothesis}  \def\hypothesisautorefname  {Hypothesis}} {}
+\@ifundefined{proposition}{\newtheorem {proposition}{Proposition} \newtheorem*{proposition*}{Proposition} \def\propositionautorefname {Proposition}} {}
+\@ifundefined{lemma}      {\newtheorem {lemma}      {Lemma}       \newtheorem*{lemma*}      {Lemma}       \def\lemmaautorefname       {Lemma}} {}
+\@ifundefined{corollary}  {\newtheorem {corollary}  {Corollary}   \newtheorem*{corollary*}  {Corollary}   \def\corollaryautorefname   {Corollary}} {}
+\@ifundefined{note}       {\newtheorem {note}       {Note}        \newtheorem*{note*}       {Note}        \def\noteautorefname        {Note}} {}
+\@ifundefined{theorem}    {\newtheorem {theorem}    {Theorem}     \newtheorem*{theorem*}    {Theorem}     \def\theoremautorefname     {Theorem}} {}
+\@ifundefined{assumption} {\newtheorem {assumption} {Assumption}  \newtheorem*{assumption*} {Assumption}  \def\assumptionautorefname  {Assumption}} {}
+\@ifundefined{observation}{\newtheorem {observation}{Observation} \newtheorem*{observation*}{Observation} \def\observationautorefname {Observation}} {}
+\@ifundefined{result}     {\newtheorem {result}     {Result}      \newtheorem*{result*}     {Result}      \def\resultautorefname      {Result}} {}
+\@ifundefined{notation}   {\newtheorem {notation}   {Notation}    \newtheorem*{notation*}   {Notation}    \def\notationautorefname  {Notation}}   {}
+\@ifundefined{notation*}  {\newtheorem {notation*}  {Notation}    \newtheorem*{notation*}   {Notation}    \def\notationautorefname  {Notation}}   {}
+
+%
+% Sub-environments for proofs
+%
+\newenvironment{claim}
+{\noindent\ignorespaces \textsc{Claim:} }
+{\par\noindent\ignorespacesafterend}
+
+\newenvironment{claimProof}
+{\noindent\ignorespaces\raisebox{.5ex}{\rule{0.75ex}{0.75ex}}\hspace{1ex}\textit{\textsc{Proof of Claim:}} }
+{\raisebox{.5ex}{\rule{0.75ex}{0.75ex}}\par\noindent\ignorespacesafterend}
+
+
+
+
+
+

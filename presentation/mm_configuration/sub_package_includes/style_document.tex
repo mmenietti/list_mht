@@ -1,0 +1,59 @@
+%------------------------------------------
+%------------------------------------------
+% Document Settings
+%------------------------------------------
+%------------------------------------------
+% The titlesec formats use '#' in their arguments.
+% This is not allowed within a package, at least easily.
+% Putting the configuration is a .tex file and including it seems to work.
+%
+% While that does not apply to these settings, 
+% it seemed like a good idea to keep the structure symmetric across my formats. 
+%------------------------------------------
+% \usepackage{titling}
+
+% Set the fonts if using XeLatex
+\ifxetex 
+	\setmainfont{Cambria}
+	\setsansfont{Calibri}
+  \setmonofont{Consolas}
+\else\fi
+
+
+% Page layout
+\geometry{includeall=true, driver=xetex, top=0.75in, bottom=1in, left=1.5in, right=0.5in}
+
+% Extensive document formatting Settings
+\ifmmDocStyle
+    % Set caption styles
+    \DeclareCaptionFormat{myFloatFormat}{\RaggedRight #1 #2. #3}
+    \DeclareCaptionStyle{myFloatStyle}{format = {myFloatFormat},labelsep=none, font={rm}}
+    \captionsetup{style=myFloatStyle}
+
+    % Set section heading styles
+    % \titleformat{\section}[hang]{\Large\bfseries}{\thesection. }{0em}{\rule{0pt}{1cm}}
+    % \titleformat{\subsection}[hang]{\large\bfseries}{\thesubsection. }{0em}{}%[hafter-codei]
+    % \titleformat{\subsubsection}[hang]{\normalsize\bfseries}{\thesubsubsection. }{0em}{}%[hafter-codei]
+
+    % \titlespacing{\section}{0pt}{0.5ex}{1em}
+    % \titlespacing{\subsection}{0em}{0.5ex}{0em}
+    % \titlespacing{\subsubsection}{0em}{0.5ex}{0em}
+
+    % Special handling for appendices which are not treated like sections
+    \renewcommand{\appendixpagename}{\LARGE\bfseries Appendices}
+\fi
+
+% % Customize the title page
+% \pretitle{\begin{center}\LARGE}
+% \posttitle{\par\end{center}\vskip 0.5em}
+
+% \preauthor{
+%     \begin{center}
+%       \large \lineskip 0.5em
+%       \setlength{\tabcolsep}{2pt}
+%       \begin{tabular}[t]{rl}
+% }
+% \postauthor{\end{tabular}\par\end{center}}
+
+% \predate{\begin{center}\large}
+% \postdate{\par\end{center}}

@@ -1,0 +1,70 @@
+%----------------------------------------------------
+% Package Header
+%----------------------------------------------------
+% Needed for a latex package
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{./mm_configuration/package_includes}
+
+
+% Variables to gate the includes based on package options
+% Directly including the packages is not allowed
+\newif\ifmmMath       \mmMathfalse     
+\newif\ifmmBiblio     \mmBibliofalse
+\newif\ifmmFakeBiblio \mmFakeBibliofalse   
+\newif\ifmmCrossRef   \mmCrossReffalse 
+\newif\ifmmDocStyle   \mmDocStylefalse 
+\newif\ifmmPGF        \mmPGFfalse
+
+% An additional variable is needed to toggle the
+% endfloat package with an option 
+\newif\ifmmFloat     \mmFloatfalse    
+\newif\ifmmEndFloats \mmEndFloatsfalse    
+
+% These declare the options and run code conditional on including the option.
+% If an option is included the corresponding boolean is set to true.
+\DeclareOption{mmFloat}     {\mmFloattrue}
+\DeclareOption{mmEndFloats} {\mmEndFloatstrue}
+\DeclareOption{mmMath}      {\mmMathtrue}
+\DeclareOption{mmCrossRef}  {\mmCrossReftrue}
+\DeclareOption{mmBiblio}    {\mmBibliotrue}
+\DeclareOption{mmFakeBiblio}{\mmFakeBibliotrue}
+\DeclareOption{mmDocStyle}  {\mmDocStyletrue}
+\DeclareOption{mmPGF}       {\mmPGFtrue}
+
+% Needed by latex packages.
+% Ends the options processing section of the package
+% and executes the code therein.
+\ProcessOptions\relax
+
+%----------------------------------------------------
+
+% Packages I always want to include
+\include{./mm_configuration/sub_package_includes/basic}
+
+% Fake citation/bibliography commands to speed complilation 
+% when actual citations/bibliographies are not needed
+\ifmmFakeBiblio
+	\renewcommand{\cite}[1]{[TEMP #1]}
+	\newcommand{\textcite}[1]{[TEMP #1]}
+	\newcommand{\printbibliography}{\paragraph{[TEMP: Bibliography will be here later.]}}
+	\newcommand{\addbibresource}[1]{}	
+\fi
+
+% Dummy
+% Additional complication to enable toggling of the endfloat package by option
+\ifmmFloat
+	\ifmmEndFloats
+		\RequirePackage[mmEndFloats]{./mm_configuration/sub_package_includes/floats}
+		\typeout{Including float packages with end floats option.}
+	\else
+		\RequirePackage{./mm_configuration/sub_package_includes/floats}
+		\typeout{Including float packages.}
+	\fi
+\fi
+
+% Optionally include packages
+\ifmmMath     \include{./mm_configuration/sub_package_includes/math}          \typeout{Including math packages.}            \fi
+\ifmmBiblio   \include{./mm_configuration/sub_package_includes/bibliography}  \typeout{Including bibliography packages.}    \fi
+\ifmmCrossRef \include{./mm_configuration/sub_package_includes/cross_ref}     \typeout{Including cross-reference packages.} \fi
+\ifmmDocStyle \include{./mm_configuration/sub_package_includes/doc_style}     \typeout{Including doc style packages.}       \fi
+\ifmmPGF      \include{./mm_configuration/sub_package_includes/pgf_graphics}  \typeout{Including PGF packages.}             \fi

@@ -1,0 +1,151 @@
+%------------------------------------------
+%------------------------------------------
+% Presentation Settings
+%------------------------------------------
+%------------------------------------------
+% The titlesec formats use '#' in their arguments.
+% This is not allowed within a package, at least easily.
+% Putting the configuration is a .tex file and including it seems to work.
+%------------------------------------------
+
+%------------------------------------------
+% Packages needed for presentations settings
+%------------------------------------------
+% Support for page layout customization
+\usepackage{geometry}
+
+% Support for header customization
+\usepackage{fancyhdr}
+
+% Customize title and sections headers
+\usepackage[explicit]{titlesec}
+
+% Customize title page
+\usepackage{titling}
+
+% Defines command for LISH logos and logo colors
+\usepackage{xcolor}
+\usepackage{tikz}
+\input{mm_configuration/sub_package_includes/lish_design}
+
+% Fiddly length adjustments
+\setlength{\headheight}{18pt}
+\setlength{\headsep}{1ex}
+\setlength{\footskip}{3.7pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0cm}
+
+\setlength{\abovedisplayskip}{-1ex}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt} 
+
+% Layout a 16:9 page sized for 10pt fonts to be "presentation size", so small pages.
+\ifxetex 
+    \geometry{driver=xetex, paperwidth=80ex, paperheight=45ex, top=7ex, bottom=0ex, left=2ex, right= 1ex, marginparsep=0pt, marginparwidth=0pt}
+\else
+    \geometry{paperwidth=80ex, paperheight=45ex, top=7ex, bottom=0ex, left=2ex, right= 1ex, marginparsep=0pt, marginparwidth=0pt}
+\fi
+
+% Clear page headers and footers. 
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust section styles to work as slide titles
+\newcommand{\sectionbreak}{\clearpage}
+
+\titlespacing{\section}{0pt}{0em}{-4ex}
+\titlespacing{\subsection}{0em}{0em}{-2ex}
+\titlespacing{\subsubsection}{0em}{0em}{0em}
+
+\ifxetex 
+    \newcommand{\mmSectionFormat}[1]{
+        \vfill
+        \thispagestyle{empty}
+        \centering{
+            \huge\sffamily
+            \addfontfeature{LetterSpace=5.0}
+            \textcolor{lishRed}{#1}
+        }
+    }
+    \newcommand{\mmSubSectionFormat}[1]{
+        \clearpage
+        \lhead{
+            \Large\sffamily
+            \addfontfeature{LetterSpace=10.0}
+            \textcolor{lishRed}{#1}
+        }
+    }
+    \newcommand{\mmSubSubSectionFormat}[1]{
+        \rhead{
+            \large\sffamily
+            \addfontfeature{LetterSpace=15.0}
+            \textcolor{lishRed}{#1}
+        }
+    }    
+\else
+    \newcommand{\mmSectionFormat}[1]{
+        \vfill
+        \thispagestyle{empty}
+        \centering{ \huge\sffamily\textcolor{lishRed}{#1} }
+    }
+    \newcommand{\mmSubSectionFormat}[1]{
+        \clearpage
+        \lhead{ \Large\sffamily\textcolor{lishRed}{#1} }
+    }
+    \newcommand{\mmSubSubSectionFormat}[1]{
+        \rhead{ \large\sffamily\textcolor{lishRed}{#1} }
+    }    
+\fi
+
+\titleformat{\section}      [hang]{} {}{0em}{\mmSectionFormat{#1}}      [\vfill]
+\titleformat{\subsection}   [hang]{}{}{0em}{\mmSubSectionFormat{#1}}    %[hafter-codei]
+\titleformat{\subsubsection}[hang]{}{}{0em}{\mmSubSubSectionFormat{#1}} %[hafter-codei]
+
+% Turn off text justification as it isn't appropriate for a presentation
+\raggedright
+
+% Customize the title page
+\newenvironment{nscenter}
+ {\parskip=0pt\par\nopagebreak\centering}
+ {\par\noindent\ignorespacesafterend}
+ 
+\setlength{\droptitle}{-13.75ex}
+
+\pretitle{\thispagestyle{fancy}\renewcommand{\footrulewidth}{0.4pt}
+    \begin{flushleft}\lishLogoSmall\end{flushleft}
+    \vfill
+    \Large\sffamily
+    \begin{center}
+}
+\posttitle{\end{center}}
+
+\preauthor{\par
+    \sffamily\setlength{\tabcolsep}{2pt}
+    \begin{center}
+        \begin{tabular}{rl}
+}
+\postauthor{
+        \end{tabular}
+    \end{center}
+    \setlength{\tabcolsep}{6pt}		
+}
+
+\predate{
+    \sffamily
+    \begin{center}
+}
+\postdate{
+    \end{center}
+    \vfill
+    \hspace{-0.5ex}\rule{\textwidth}{1pt}
+
+    \hfill\parbox{0.12\textwidth}{\includegraphics[width=0.111\textwidth]{./media/hbs_logo}}\hfill
+          \parbox{0.12\textwidth}{\includegraphics[width=0.111\textwidth]{./media/catalyst_logo}}\hfill
+          \parbox{0.12\textwidth}{\includegraphics[width=0.111\textwidth]{./media/engineering_school_logo}}\hfill
+          \parbox{0.12\textwidth}{\includegraphics[width=0.111\textwidth]{./media/iqss_logo}}\hfill
+    % \includegraphics[width=0.8\textwidth]{./media/lab_collaborators_banner}
+}

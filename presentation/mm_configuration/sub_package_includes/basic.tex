@@ -1,0 +1,30 @@
+%----------------------------------------------------------------------------------
+% Basic Engine Fixes/Adjustments
+%----------------------------------------------------------------------------------
+
+% Enables commands for checking for layout engine type in the document
+\usepackage{iftex}
+
+% Enables easy font selection with Xelatex
+\ifXeTeX \usepackage{fontspec} \else \fi
+
+% Enables access to accent unicode characters for Xelatex
+\ifXeTeX \usepackage{xunicode} \else \fi
+
+% Advanced command definitions
+\usepackage{xparse}
+
+% Page Layout Customization
+\usepackage{geometry}
+
+% Enhanced text justification options
+\usepackage{ragged2e}
+
+% Unicode input for latex
+\ifXeTeX \else \usepackage[utf8]{inputenc} \fi
+
+% Nice Font Handling for pdflatex
+\ifXeTeX \else \usepackage{lmodern} \fi
+
+% Nice horizontal lines for tables
+\usepackage{booktabs}

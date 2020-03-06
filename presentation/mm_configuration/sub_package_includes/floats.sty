@@ -1,0 +1,36 @@
+%----------------------------------------------------
+% Package Header
+%----------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{./mm_configuration/package_floats}
+
+%---------------------------------------------------------------------------------
+% Move Floats to end of the document; float handling for Journals. 
+% Package doesn't seem to offer an option to toggle its process.
+% Hence wrapping it in my own option.
+%---------------------------------------------------------------------------------
+\newif\ifmmEndFloats \mmEndFloatsfalse      
+
+\DeclareOption{mmEndFloats}{\mmEndFloatstrue}
+
+\ProcessOptions\relax
+
+%----------------------------------------------------------------------------------
+% Floats
+%----------------------------------------------------------------------------------
+% Support for subfloats within a float environment
+\RequirePackage{subfig}
+
+% Support for blocking float migration during layout. 
+% Typically keeping them within the section they are defined.
+\RequirePackage[section]{placeins}
+
+\ifmmEndFloats 
+	\RequirePackage{endfloat}
+	
+	% Use to move sideways figures and tables to the end of the manuscript	
+	\DeclareDelayedFloatFlavor{sidewaysfigure}{figure}
+	\DeclareDelayedFloatFlavor{sidewaystable}{table}
+	
+	\typeout{Including float packages.}
+\fi
