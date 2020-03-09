@@ -41,7 +41,11 @@ classdef mht
             difference_studentized_centered_boot_matrix = zeros(n_comparisons, n_boot);
                                    
             parfor l = 1 : n_boot
-                Y_boot = cellfun(@(z) z(randi(numel(z), [numel(z), 1])), Y_cell, 'UniformOutput', false); 
+                % Resample with replacement.
+				% NOTE: Unlike the paper this is block bootstrapping. I believe 
+				% it should be asymptotically equivalent as the number of observations per treatment-subgroup grows large.
+				% It avoids the issue of drawing a bootstrap sample missing a treatment-subgroup.
+				Y_boot = cellfun(@(z) z(randi(numel(z), [numel(z), 1])), Y_cell, 'UniformOutput', false); 
                 
                 mean_boot= cellfun(@mean, Y_boot);
                 var_boot = cellfun(@var, Y_boot);
@@ -57,7 +61,7 @@ classdef mht
             p_values_single_og = 1 - ts_distribution_og;
 			p_values_single_boot = 1 - ts_distribution_boot;
             
-            p_values_multi = mht.calculate_multiple_hypothesis_p_value(p_values_single_og, p_values_single_boot);
+            p_values_multi = mht.calculate_stepwise_multiple_hypothesis_p_value(p_values_single_og, p_values_single_boot);
           
         end
                 
@@ -120,9 +124,9 @@ classdef mht
             n_boot = size(ts_boot,2);
             n_comparisons = size(ts_og,1);
             
-            [ts_boot, sort_idx] = sort(ts_boot,2);
-                        
             ts_distribution_og = sum(ts_boot <= ts_og, 2) / n_boot;
+			
+            [~, sort_idx] = sort(ts_boot,2);			
             ts_distribution_boot = repmat((1:n_boot) / n_boot, [n_comparisons, 1]);
             
             ts_distribution_boot(sort_idx) = ts_distribution_boot;
@@ -147,7 +151,7 @@ classdef mht
             p_values = zeros(n_comparisons,1);
             
             for l = 1 : n_comparisons
-                p_values(l) = calculate_multiple_hypothesis_p_value(p_values_single_og(l), p_values_single_boot(l:end,:));
+                p_values(l) = mht.calculate_multiple_hypothesis_p_value(p_values_single_og(l), p_values_single_boot(l:end,:));
             end
             p_values(idx_sort) = p_values;
         end
