@@ -27,4 +27,4 @@ Other environments have not been tested.
 
 The Matlab implementation of the List (2019) MHT algorithm resides in the `matlab` directory.
 The algorithm is implemented as a class in `mht.m`.
-A test `script_list_mht_test.m` is included. 
+A test script `script_list_mht_test.m` is included. 
