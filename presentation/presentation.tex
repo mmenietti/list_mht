@@ -33,6 +33,15 @@
 
 	\maketitle
 
+	\section{Front matter}
+	
+	\subsection{Links}
+	
+	\begin{itemize}
+		\item This presentation and sample code can be found at: \url{https://github.com/mmenietti/list_mht}
+		\item Sample code from \textcite{list_2019} can be found at: \url{https://github.com/seidelj/mht}
+	\end{itemize}
+	
 	\section{Overview}
 
 	\subsection{Terminology}
@@ -122,6 +131,22 @@
 		\hypTest{d,d^\prime,k,z} &= \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y_{i,k} - \frac{1}{\wrapAbs{\mathcal{B}}}\sum_{i\in\mathcal{B}} Y_{i,k} = 0 \\
 		\mathcal{A} &= \set{i\in J_N}{D_i=d, Z_i=z} \\
 		\mathcal{B} &= \set{i\in J_N}{D_i=d^\prime, Z_i=z}
+	\end{align*}
+
+	\subsection{Test Statistic}
+
+	\begin{align*}
+		T_h(Y^{\prime},D^{\prime},Z^{\prime}) &= \sqrt{n}\wrapAbs{\frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y^{\prime}_{i,k} - \frac{1}{\wrapAbs{\mathcal{B}}}\sum_{i\in\mathcal{B}} Y^{\prime}_{i,k}} \\	
+		\tilde{T}_h(Y^{\prime},D^{\prime},Z^{\prime}) &= \sqrt{n}\wrapAbs{\frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y^{\prime}_{i,k} - \frac{1}{\wrapAbs{\mathcal{B}}}\sum_{i\in\mathcal{B}} Y^{\prime}_{i,k} - \del{\mu_{\mathcal{A}}-\mu_{\mathcal{B}}} } \\	
+		\mu_{\mathcal{A}} &= \frac{1}{\wrapAbs{\mathcal{A}}}\sum_{i\in\mathcal{A}} Y_{i,k}, \qquad \mu_{\mathcal{B}} = \frac{1}{\wrapAbs{\mathcal{B}}}\sum_{i\in\mathcal{B}} Y_{i,k}
+	\end{align*}
+
+	\subsection{Studentized Test Statistic}
+
+	\begin{align*}
+		\lambda_h &= \sqrt{n \del{\frac{\sigma^2_{\mathcal{A}}}{n_{\mathcal{A}}} + \frac{\sigma^2_{\mathcal{B}}}{n_{\mathcal{B}}} }} \\
+		T^{\text{stud}}_h &= \frac{T_h}{\lambda_h} \\
+		\tilde{T}^{\text{stud}}_h &= \frac{\tilde{T}_h}{\lambda_h}		
 	\end{align*}
 
 	\subsection{Algorithm 3.1}
